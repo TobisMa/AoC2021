@@ -12,10 +12,8 @@ def check(d):
     return inc
         
 
-if __name__ == "__main__":
-    i = ""
-    c = None
-    while c != "":
-        c = input()
-        i += c + "\n"
-    print(check(i))
+if __name__ == '__main__':
+    with open("d1/input.txt", "r") as f:
+        contents = f.read()
+        
+    print(check(contents))
