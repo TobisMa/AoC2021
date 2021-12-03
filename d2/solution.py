@@ -23,6 +23,6 @@ class Submarine:
 
 if __name__ == "__main__":
     submarine = Submarine(0, 0)
-    with open("a2/input.txt", "r") as f:
+    with open("d2/input.txt", "r") as f:
         submarine.navigation(f.read().splitlines())
     print(submarine)
