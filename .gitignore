@@ -1,2 +1,5 @@
 __pychache__
-d6
+d7
+.vscode
+.idea
+*.pyc
