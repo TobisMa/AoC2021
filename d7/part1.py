@@ -1,4 +1,5 @@
 from typing import List
+import time
 
 
 def solve(data: List[str]):
@@ -17,11 +18,7 @@ def solve(data: List[str]):
     
 
 def calculate_fuel(numbers, distance):
-    fuel = 0
-    for pos in numbers:
-        n = abs(abs(pos) - distance)
-        fuel += ((n + 1) * n) / 2
-    return fuel
+    return sum(abs(abs(pos) - distance) for pos in numbers)
         
 
 
