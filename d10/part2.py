@@ -17,16 +17,6 @@ POINTS = {
 }
 
 
-def median(i):
-    c = i.copy()
-    c.sort()
-    l = len(c)
-    if l%2 == 0:
-        return min(c[l], c[l-1])
-    else:
-        return c[l // 2]
-
-
 def solve(lines: List[str]):
     scores = []
     for line in lines:
@@ -44,7 +34,7 @@ def solve(lines: List[str]):
             for left in reversed(brackets):
                 points = points * 5 + POINTS[RMACTHING_BRACKETS[left]]
             scores.append(points)
-    return median(scores)
+    return sorted(scores)[len(scores) // 2]
     
 
 def main(filename):
