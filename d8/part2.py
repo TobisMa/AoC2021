@@ -34,7 +34,7 @@ def solve(lines):
                 break
             
         shown = ""
-        mapping = {v: k for k, v in mapping.items()}
+        mapping = {v: k for k, v in mapping.items()}  # type: ignore
         for res in out:
             segments = [mapping[d] for d in res]
             segments.sort()
