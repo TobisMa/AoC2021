@@ -1,76 +1,81 @@
-# -*- coding: utf-8 -*-
-from functools import cache
-from typing import List, Tuple
+from typing import Generator, List, Set, Tuple
+
+
+field = []
 
 
 def solve(lines: List[str]):
-    field = [[int(x) for x in list(line)] for line in lines]
+    global field
+    field = [[int(c) for c in line] for line in lines]
     basins = find_basins(field)
-    sizes = [count_neighbours(basin, field) for basin in basins]
-    return prod(sorted(sizes, reverse=True)[:3])
-
-def prod(i):
-    s = i[0]
-    for v in i[1:]:
-        s *= v
-    return s
-
-def count_neighbours(basin: Tuple[int, int], field, counted=None):
-    anz = 0
-    x, y = basin
-    h = field[y][x]
-    if counted is None:
-        counted = {(x, y)}
-
-    for d in (-1, 1):
-        # x-axis
-        if (
-            valid_field(x + d, y, field)
-            and (x + d, y) not in counted
-            and field[y][x + d] == h + 1
-            # and field[y][x + d] < 9
-        ):
-            counted.add((x + d, y))
-            anz += count_neighbours((x + d, y), field, counted)
-        if (
-            valid_field(x, y + d, field)
-            and (x, y + d) not in counted
-            and field[y + d][x] == h + 1
-            # and field[y + d][x] < 9
-        ):
-            counted.add((x, y + d))
-            anz += count_neighbours((x, y + d), field, counted) 
-
-    return anz + 1
-                
-                
+    sizes = []
+    
+    for b in basins:
+        size = measure_size(b, set())
+        sizes.append(size)
+        
+    sizes.sort(reverse=True)
+    return prod(sizes[:3])
 
 
+def measure_size(pos: Tuple[int, int], computed: Set[Tuple[int, int]]) -> int:
+    x, y = pos
+    ph = field[y][x]
+    
+    total = 0
+    neighbours = get_neighbours(x, y)
+    for n in neighbours:
+        if n in computed:
+            continue
+        
+        nx, ny = n
+        computed.add(n)
+        h = field[ny][nx]
+        
+        if h < 9:
+            total += 1
+            res = measure_size(n, computed)
+            total += res
+    
+    return total
 
-def find_basins(field): 
+
+def find_basins(field: List[List[int]]) -> Generator[Tuple[int, int], None, None]:
     for y in range(len(field)):
         for x in range(len(field[y])):
-            l = field[y][x]
-            values = []
-            for d in [1, -1]:
-                if valid_field(x, y + d, field):
-                    values.append(field[y + d][x])
-                if valid_field(x + d, y, field):
-                    values.append(field[y][x + d])
-                    
-            if l < min(values):
+            neighbour = get_neighbours(x, y)
+            values = [field[y][x] for x, y in neighbour]
+            
+            if field[y][x] < min(values):
                 yield x, y
+                
+
+def get_neighbours(x: int, y: int) -> Generator[Tuple[int, int], None, None]:
+    for d in [-1, 1]:
+        if valid_field(x + d, y):
+            yield x + d, y
+        if valid_field(x, y + d):
+            yield x, y + d
 
 
-def valid_field(x, y, f):
-    return 0 <= x < len(f[0]) and 0 <= y < len(f)
+def valid_field(x: int, y: int):
+    return 0 <= x < len(field[0]) and 0 <= y < len(field)
+        
+        
+def prod(iterable):
+    r = 1
+    for v in iterable:
+        print(v)
+        r *= v
+    return r
 
 
 def main(filename):
-    with open(filename, "r") as f:
-        return solve(f.read().splitlines())
+    with open(filename) as f:
+        print(solve(f.read().splitlines()))
+
 
 if __name__ == "__main__":
-    # print(main("d9/example.txt"))
-    # print(main("d9/input.txt"))
-    print(main("d9/ex2.txt"))
+    main("d9/input.txt")
+    # main("d9/ex2.txt")
+    # main("d9/example.txt")
