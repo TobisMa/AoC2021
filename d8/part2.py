@@ -1,58 +1,36 @@
-from typing import Iterable, List, Set
+from typing import Dict, Iterable, List, Set
 import sys
 from itertools import permutations
 
 
-NUMBERS = [
-    "abcefg",
-    "cf",
-    "acdeg",
-    "acdfg",
-    "bcdf",
-    "abcdfg",
-    "abdefg",
-    "acf",
-    "abcdefg",
-    "abcdfg"
-]
+def solve(lines: List[str]):
+    display = {'abcefg': '0', 'cf': '1', 'acdeg': '2', 'acdfg': '3', 'bcdf': '4', 'abdfg': '5', 'abdefg': '6', 'acf': '7', 'abcdefg': '8', 'abcdfg': '9'}
 
-
-def solve(lines):
     total = 0
+    
     for line in lines:
-        sl = line.split(" | ")
-        sent_seq = list(map(set, sl[0].split()))
-        out_seq = list(map(set, sl[1].split())) 
-        
-        for permutation in permutations("abcdefg"):
-            mapping = {l: permutation[i] for i, l in enumerate("abcdefg")}
-            for s in sent_seq:
-                digit = ""
-                for l in s:
-                    digit += mapping[l]
-                
-                digit = ''.join(sorted(list(digit)))
-                
-                if digit not in NUMBERS:
+        seq, output = line.strip().split('|')
+        seq = [set(x) for x in seq.strip().split()]
+        output = [set(x) for x in output.strip().split()]
+
+        for p in permutations("abcdefg"):
+            mapping = dict(zip(p, "abcdefg"))
+            for o in seq:
+                dig = ''.join(sorted(mapping[c] for c in o))
+                if dig not in display:
                     break
+                
             else:
                 break
-        else:
-            return "Wtf"
-        
-        number = ""
-        for o in out_seq:
-            d = ""
-            for l in o:
-                d += mapping[l]
-            d = ''.join(sorted(list(d)))
-            n = NUMBERS.index(d)
-            number += str(n)
-            
-        total += int(number)
 
+        total += int(''.join(
+            display[
+                ''.join(sorted(mapping[c] for c in o))
+            ] 
+            for o in output
+        ))
 
-    return total
+    print(total)
 
 
 def main(filename):
