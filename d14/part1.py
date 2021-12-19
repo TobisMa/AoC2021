@@ -23,7 +23,7 @@ class PolymerTemplate(object):
             self.templ = self.templ[:t[0] + 1] + t[1] + self.templ[t[0] + 1:]
             
             
-    def repear_insertion(self, times=5):
+    def repeat_insertion(self, times=5):
         for _ in range(times):
             self.insert()
         
@@ -33,7 +33,7 @@ def solve(data: List[str]):
     polymer_template = data[0]
     rules = [line for line in data if line]
     pt = PolymerTemplate(polymer_template, rules)
-    pt.repear_insertion(2)
+    pt.repeat_insertion(10)
     print(pt.templ)
     histo = histogram(pt.templ)
     h = [(k, v) for k, v in histo.items()]
