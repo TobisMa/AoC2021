@@ -31,7 +31,7 @@ def solve(lines: List[str]):
             for o in output
         ))
 
-    print(total)
+    return total
 
 
 def main(filename):
