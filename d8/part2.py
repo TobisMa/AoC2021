@@ -12,6 +12,7 @@ def solve(lines: List[str]):
         seq, output = line.strip().split('|')
         seq = [set(x) for x in seq.strip().split()]
         output = [set(x) for x in output.strip().split()]
+        mapping = dict(zip("abcdefg", "abcdefg"))  #  to get rid of UnboundLocalError
 
         for p in permutations("abcdefg"):
             mapping = dict(zip(p, "abcdefg"))
