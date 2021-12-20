@@ -1,14 +1,18 @@
 from typing import List
+import time
 
 
 def solve(data: List[str]):
     algo = data[0]
     image = [list(line) for line in data[1:] if line]
     outside = "."
+    with open("d20/image.txt", "w"):
+        pass
     for _ in range(50):
         image, outside = transcribe(image, algo, outside)
-        # print('\n'.join("".join(l) for l in image))
-        # print()
+        with open("d20/image.txt", "a") as f:
+            print('\n'.join("".join(l) for l in image), file=f)
+            print(file=f)
     c = 0
     for y in range(len(image)):
         for x in range(len(image[y])):
@@ -45,9 +49,11 @@ def get_relevant(pos, image, outside):
     
 def main(filename: str):
     with open(filename, 'r') as f:
+        start = time.process_time_ns()
         print(solve(f.read().splitlines()))
+        print(time.process_time_ns() - start)
     
 
 if __name__ == '__main__':
-    main("d20/input.txt")
-    # main("d20/example.txt")
+    # main("d20/input.txt")
+    main("d20/example.txt")
